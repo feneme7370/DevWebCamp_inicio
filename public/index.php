@@ -2,8 +2,14 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use Controllers\APIEventos;
 use MVC\Router;
 use Controllers\AuthController;
+use Controllers\EventosController;
+use Controllers\RegalosController;
+use Controllers\PonentesController;
+use Controllers\DashboardController;
+use Controllers\RegistradosController;
 
 $router = new Router();
 
@@ -28,6 +34,33 @@ $router->post('/reestablecer', [AuthController::class, 'reestablecer']);
 // Confirmación de Cuenta
 $router->get('/mensaje', [AuthController::class, 'mensaje']);
 $router->get('/confirmar-cuenta', [AuthController::class, 'confirmar']);
+
+// Area de administracion
+$router->get('/admin/dashboard', [DashboardController::class, 'index']);
+
+// Area de Ponentes
+$router->get('/admin/ponentes', [PonentesController::class, 'index']);
+$router->get('/admin/ponentes/crear', [PonentesController::class, 'crear']);
+$router->post('/admin/ponentes/crear', [PonentesController::class, 'crear']);
+$router->get('/admin/ponentes/editar', [PonentesController::class, 'editar']);
+$router->post('/admin/ponentes/editar', [PonentesController::class, 'editar']);
+$router->get('/admin/ponentes/eliminar', [PonentesController::class, 'eliminar']);
+$router->post('/admin/ponentes/eliminar', [PonentesController::class, 'eliminar']);
+
+
+// Area de Eventos
+$router->get('/admin/eventos', [EventosController::class, 'index']);
+$router->get('/admin/eventos/crear', [EventosController::class, 'crear']);
+$router->post('/admin/eventos/crear', [EventosController::class, 'crear']);
+
+// Area de API para horarios
+$router->get('/api/eventos-horario', [APIEventos::class, 'index']);
+
+// Area de Registrados
+$router->get('/admin/registrados', [RegistradosController::class, 'index']);
+
+// Area de Regalos
+$router->get('/admin/regalos', [RegalosController::class, 'index']);
 
 
 $router->comprobarRutas();
