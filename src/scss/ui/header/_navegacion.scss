@@ -15,7 +15,8 @@
         font-weight: v.$black;
         text-transform: uppercase;
 
-        &:hover{
+        &:hover,
+        &--actual{
             background-color: v.$blanco;
             color: v.$azul;
         }

@@ -1,12 +1,12 @@
 const { src, dest, watch, parallel } = require('gulp');
 
 // CSS
-const sass = require('gulp-sass')(require('sass'));
+const sass = require('gulp-sass')(require('sass'));//compila sass
 const plumber = require('gulp-plumber');
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-const postcss = require('gulp-postcss');
-const sourcemaps = require('gulp-sourcemaps');
+const autoprefixer = require('autoprefixer');//compatible navegadores viejos
+const cssnano = require('cssnano');//mimificar css
+const postcss = require('gulp-postcss');//ejecuta nano y autoprefixer
+const sourcemaps = require('gulp-sourcemaps');//crea archivo map para inspeccinar
 
 // Imagenes
 const cache = require('gulp-cache');
@@ -15,9 +15,12 @@ const webp = require('gulp-webp');
 const avif = require('gulp-avif');
 
 // Javascript
-const terser = require('gulp-terser-js');
+const terser = require('gulp-terser-js');//mimifica js
 const concat = require('gulp-concat');
-const rename = require('gulp-rename')
+const rename = require('gulp-rename');
+
+// Webpack
+const webpack = require('webpack-stream');
 
 
 const paths = {
@@ -35,8 +38,21 @@ function css() {
 }
 function javascript() {
     return src(paths.js)
+    .pipe( webpack({
+        module: {
+            rules: [
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 'css-loader']
+                }
+            ]
+        },
+        mode: 'production',
+        watch: true,
+        entry: './src/js/app.js'
+    }))
       .pipe(sourcemaps.init())
-      .pipe(concat('bundle.js')) 
+      //.pipe(concat('bundle.js')) 
       .pipe(terser())
       .pipe(sourcemaps.write('.'))
       .pipe(rename({ suffix: '.min' }))

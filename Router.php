@@ -21,6 +21,8 @@ class Router
     {
 
         $url_actual = $_SERVER['PATH_INFO'] ?? '/';
+        //$url_actual = $_SERVER['REQUEST_URI'] === '' ? '/' : $_SERVER['REQUEST_URI'];
+        //debuguear($url_actual);
         $method = $_SERVER['REQUEST_METHOD'];
 
         if ($method === 'GET') {
@@ -32,7 +34,7 @@ class Router
         if ( $fn ) {
             call_user_func($fn, $this);
         } else {
-            echo "Página No Encontrada o Ruta no válida";
+            header('Location: /404');
         }
     }
 

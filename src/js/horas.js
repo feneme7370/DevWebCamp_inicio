@@ -4,25 +4,44 @@
     const horas = document.querySelector('#horasUl');
 
     if(horas){
-        //objeto a llenar con los datos
-        let busqueda = {
-            categoria_id : '',
-            dia : ''
-        }
-
+        
         //seleccionar categoria conferencia o workshops
         const categoria = document.querySelector('[name="categoria_id"]');
         //seleccionar viernes o sabado
         const dias = document.querySelectorAll('[name="dia"]');
-
+        
         //es el input oculto a llenar
         const inputHiddenDia = document.querySelector('[name="dia_id"]');
         const inputHiddenHora = document.querySelector('[name="hora_id"]');
-
+        
         //agrego eventos a categoria y dias, y escuchar cambios
         categoria.addEventListener('change', terminoBusqueda);
         dias.forEach( dia => dia.addEventListener('change', terminoBusqueda))
+        
+        //objeto a llenar con los datos
+        let busqueda = {
+            categoria_id : categoria.value || '',
+            dia : inputHiddenDia.value || ''
+        }
 
+        if(!Object.values(busqueda).includes('')){
+            //la otra forma es como en ponentes.js ()=>
+            async function iniciarApp() {
+                await buscarEventos();
+            
+                const id = inputHiddenHora.value;
+                //resaltar hora actual
+                const horaSeleccionada = document.querySelector(`[data-hora-id="${id}"]`);
+                horaSeleccionada.classList.remove('horas__hora--deshabilitada');
+                horaSeleccionada.classList.add('horas__hora--seleccionada');
+
+                horaSeleccionada.onclick = seleccionarHora;
+            }
+            iniciarApp();
+        
+        }
+        //console.log(busqueda);
+        
     /* ============================ AGREGAR DATOS AL OBJETO ============================ */
         //agrega el valor la categoria o dia 
         function terminoBusqueda(e){
@@ -99,7 +118,7 @@
 
             //agregar hora y dia para el formulario
             inputHiddenHora.value = e.target.dataset.horaId; 
-            inputHiddenDia = document.querySelector('[name="dia"]:checked');
+            inputHiddenDia.value = document.querySelector('[name="dia"]:checked').value;
         }
     }
 
